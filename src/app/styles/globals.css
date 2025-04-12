@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+:root {
+  --primary: #2A2D7C;  /* Navy blue */
+  --primary-dark: #1E2066;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900;
+}
+
+/* Primary button styles */
+.btn-primary {
+  @apply bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors;
+}
+
+/* Product card hover effect */
+.product-card {
+  @apply transition-transform hover:scale-[1.02] duration-200;
+}
