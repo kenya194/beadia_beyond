@@ -28,43 +28,64 @@ import {
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 
-// Sample product data
-const products = [
-  {
-    id: 1,
-    name: 'Customized Bottles',
-    price: 'Ghc150 - Ghc200',
-    image: '/images/bottles.jpg',
-    category: 'kits',
-    stock: 'In Stock',
-  },
-  {
-    id: 2,
-    name: 'Customized Jewelry Set',
-    price: 'Ghc150 - Ghc200',
-    image: '/images/gold.jpg',
-    category: 'jewelry',
-    stock: 'In Stock',
-  },
-  {
-    id: 3,
-    name: 'Beads',
-    price: 'Ghc120 - Ghc150',
-    image: '/images/bracelets.jpg',
-    category: 'beads',
-    stock: 'In Stock',
-  },
-  {
-    id: 4,
-    name: 'Customized Sets',
-    price: 'Ghc350 - Ghc450',
-    image: '/images/package.jpg',
-    category: 'beads',
-    stock: 'In Stock',
-  },
+// Helper function to generate products
+const generateProducts = () => {
+  const products = [];
+  let id = 1;
 
-  // Add more products as needed
-];
+  // Generate bead products (B1-B17)
+  for (let i = 1; i <= 17; i++) {
+    products.push({
+      id: id++,
+      name: `Bead Set ${i}`,
+      price: 'Ghc120 - Ghc150',
+      image: `/images/B${i}.jpg`,
+      category: 'beads',
+      stock: 'In Stock',
+    });
+  }
+
+  // Generate jewelry products (J1-J11)
+  for (let i = 1; i <= 11; i++) {
+    products.push({
+      id: id++,
+      name: `Jewelry Set ${i}`,
+      price: 'Ghc150 - Ghc200',
+      image: `/images/J${i}.jpg`,
+      category: 'jewelry',
+      stock: 'In Stock',
+    });
+  }
+
+  // Generate kit products (D1-D8)
+  for (let i = 1; i <= 8; i++) {
+    products.push({
+      id: id++,
+      name: `Kit Set D${i}`,
+      price: 'Ghc350 - Ghc450',
+      image: `/images/D${i}.jpg`,
+      category: 'kits',
+      stock: 'In Stock',
+    });
+  }
+
+  // Generate kit products (W1-W3)
+  for (let i = 1; i <= 3; i++) {
+    products.push({
+      id: id++,
+      name: `Kit Set W${i}`,
+      price: 'Ghc350 - Ghc450',
+      image: `/images/W${i}.jpg`,
+      category: 'kits',
+      stock: 'In Stock',
+    });
+  }
+
+  return products;
+};
+
+// Generate the products array
+const products = generateProducts();
 
 const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -110,26 +131,25 @@ const ProductList = () => {
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6} md={4}>
-            <TextField
-              fullWidth
-              label="Search Products"
-              variant="outlined"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
             <FormControl fullWidth>
-              <InputLabel>Category</InputLabel>
+              <InputLabel>Search</InputLabel>
               <Select
                 value={category}
                 label="Category"
                 onChange={(e) => setCategory(e.target.value)}
+                sx={{ 
+                  bgcolor: 'background.paper',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'primary.main',
+                  },
+                }}
               >
                 <MenuItem value="all">All Categories</MenuItem>
-                <MenuItem value="beads">Beads</MenuItem>
-                <MenuItem value="jewelry">Jewelry</MenuItem>
-                <MenuItem value="kits">Kits</MenuItem>
+                <MenuItem value="beads">Beads Collection</MenuItem>
+                <MenuItem value="jewelry">Jewelry Collection</MenuItem>
+                <MenuItem value="kits">Kit Sets</MenuItem>
+                <MenuItem value="premium">Premium Collection</MenuItem>
+                <MenuItem value="accessories">Accessories</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -140,6 +160,12 @@ const ProductList = () => {
                 value={sortBy}
                 label="Sort By"
                 onChange={(e) => setSortBy(e.target.value)}
+                sx={{ 
+                  bgcolor: 'background.paper',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'primary.main',
+                  },
+                }}
               >
                 <MenuItem value="name">Name</MenuItem>
                 <MenuItem value="price">Price</MenuItem>
@@ -150,57 +176,100 @@ const ProductList = () => {
       </Box>
 
       {/* Product Grid */}
-      <Grid container spacing={4}>
+      <Grid 
+        container 
+        spacing={{ xs: 2, sm: 3, md: 4 }}
+        sx={{ 
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)',
+          },
+          gap: { xs: 2, sm: 3, md: 4 },
+          mt: 2,
+        }}
+      >
         {filteredProducts.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
+          <Grid item key={product.id}>
             <motion.div
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
+              style={{ height: '100%' }}
             >
-              <Card>
+              <Card 
+                sx={{ 
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  boxShadow: 3,
+                  '&:hover': {
+                    boxShadow: 6,
+                  },
+                }}
+              >
                 <CardMedia
                   component="img"
-                  height="200"
+                  sx={{ 
+                    height: 320,
+                    objectFit: 'cover',
+                  }}
                   image={product.image}
                   alt={product.name}
                 />
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="h2">
+                <CardContent 
+                  sx={{ 
+                    flexGrow: 1,
+                    pb: 2,
+                    pt: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Typography 
+                    gutterBottom 
+                    variant="h6" 
+                    component="h3"
+                    sx={{ 
+                      fontWeight: 'bold',
+                      fontSize: '1.1rem',
+                      mb: 1,
+                    }}
+                  >
                     {product.name}
                   </Typography>
-                  <Typography variant="h6" color="primary" gutterBottom>
-                    {product.price}
-                  </Typography>
-                  <Chip
-                    label={product.stock}
-                    color={product.stock === 'In Stock' ? 'success' : 'warning'}
-                    size="small"
-                  />
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography 
+                      variant="h6" 
+                      color="primary"
+                      sx={{ 
+                        fontWeight: 'bold',
+                        fontSize: '1.2rem',
+                      }}
+                    >
+                      {product.price}
+                    </Typography>
+                    <Chip
+                      label={product.stock}
+                      color={product.stock === 'In Stock' ? 'success' : 'warning'}
+                      size="small"
+                    />
+                  </Box>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ p: 2, pt: 0 }}>
                   <Button
-                    size="small"
-                    color="primary"
-                    component={RouterLink}
-                    to={`/products/${product.id}`}
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    size="small"
+                    size="medium"
                     color="secondary"
                     startIcon={<ShoppingCart />}
                     onClick={() => handleAddToCart(product)}
+                    sx={{ 
+                      width: '100%',
+                      py: 1,
+                    }}
                   >
                     Add to Cart
                   </Button>
-                  <Box sx={{ flexGrow: 1 }} />
-                  <IconButton size="small">
-                    <Favorite />
-                  </IconButton>
-                  <IconButton size="small">
-                    <Share />
-                  </IconButton>
                 </CardActions>
               </Card>
             </motion.div>

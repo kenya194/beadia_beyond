@@ -11,10 +11,9 @@ import {
   Button,
 } from '@mui/material';
 import {
-  Facebook,
   Instagram,
   Twitter,
-  Pinterest,
+  WhatsApp,
   Email,
   Phone,
   LocationOn,
@@ -97,6 +96,10 @@ const Footer = () => {
                 <Instagram />
               </IconButton>
               <IconButton
+                component="a"
+                href="https://twitter.com/beadiabeyond"
+                target="_blank"
+                rel="noopener noreferrer"
                 sx={{
                   color: theme.palette.secondary.main,
                   '&:hover': {
@@ -108,6 +111,10 @@ const Footer = () => {
                 <Twitter />
               </IconButton>
               <IconButton
+                component="a"
+                href="https://wa.me/233540754502"
+                target="_blank"
+                rel="noopener noreferrer"
                 sx={{
                   color: theme.palette.secondary.main,
                   '&:hover': {
@@ -116,7 +123,7 @@ const Footer = () => {
                   },
                 }}
               >
-                <Pinterest />
+                <WhatsApp />
               </IconButton>
             </Box>
           </Grid>
