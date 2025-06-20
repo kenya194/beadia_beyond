@@ -21,7 +21,7 @@ const generateFeaturedProducts = () => {
       name: 'Premium Beads Collection',
       // price: 'Ghc120.00',
       image: '/images/Rhinestone.jpg',
-      category: 'premium',
+      category: 'beads',
     },
     {
       id: 2,
@@ -49,7 +49,7 @@ const generateFeaturedProducts = () => {
       name: 'Customized Diaries',
       // price: 'Ghc200.00',
       image: '/images/diaries.jpg',
-      category: 'accessories',
+      category: 'diaries',
     },
     {
       id: 6,
