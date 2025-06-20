@@ -37,8 +37,8 @@ const generateProducts = () => {
   for (let i = 1; i <= 17; i++) {
     products.push({
       id: id++,
-      name: `Bead Set ${i}`,
-      price: 'Ghc120 - Ghc150',
+      name: `Customized Beads`,
+      price: 'Ghc100 - Ghc150',
       image: `/images/B${i}.jpg`,
       category: 'beads',
       stock: 'In Stock',
@@ -46,37 +46,60 @@ const generateProducts = () => {
   }
 
   // Generate jewelry products (J1-J11)
-  for (let i = 1; i <= 11; i++) {
+  for (let i = 1; i <= 13; i++) {
     products.push({
       id: id++,
-      name: `Jewelry Set ${i}`,
-      price: 'Ghc150 - Ghc200',
-      image: `/images/J${i}.jpg`,
-      category: 'jewelry',
+      name: `Customized Packages`,
+      price: 'Ghc350 - Ghc500',
+      image: `/images/P${i}.jpg`,
+      category: 'packages',
       stock: 'In Stock',
     });
   }
 
   // Generate kit products (D1-D8)
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 9; i++) {
     products.push({
       id: id++,
-      name: `Kit Set D${i}`,
-      price: 'Ghc350 - Ghc450',
+      name: `Customized Dairies`,
+      price: 'Ghc180 - Ghc650',
       image: `/images/D${i}.jpg`,
-      category: 'kits',
+      category: 'dairies',
       stock: 'In Stock',
     });
   }
 
   // Generate kit products (W1-W3)
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 6; i++) {
     products.push({
       id: id++,
-      name: `Kit Set W${i}`,
-      price: 'Ghc350 - Ghc450',
+      name: `Customized Wallets`,
+      price: 'Ghc160 - Ghc200',
       image: `/images/W${i}.jpg`,
-      category: 'kits',
+      category: 'wallets',
+      stock: 'In Stock',
+    });
+  }
+
+  // Generate kit products (W1-W3)
+  for (let i = 1; i <= 6; i++) {
+    products.push({
+      id: id++,
+      name: `Customized Watches`,
+      price: 'Ghc160 - Ghc200',
+      image: `/images/Watch${i}.jpg`,
+      category: 'watches',
+      stock: 'In Stock',
+    });
+  }
+
+  for (let i = 1; i <= 6; i++) {
+    products.push({
+      id: id++,
+      name: `Customized Jewellery`,
+      price: 'Ghc160 - Ghc200',
+      image: `/images/J${i}.jpg`,
+      category: 'jewellery',
       stock: 'In Stock',
     });
   }
@@ -145,11 +168,12 @@ const ProductList = () => {
                 }}
               >
                 <MenuItem value="all">All Categories</MenuItem>
-                <MenuItem value="beads">Beads Collection</MenuItem>
-                <MenuItem value="jewelry">Jewelry Collection</MenuItem>
-                <MenuItem value="kits">Kit Sets</MenuItem>
-                <MenuItem value="premium">Premium Collection</MenuItem>
-                <MenuItem value="accessories">Accessories</MenuItem>
+                <MenuItem value="beads">Bead Collection</MenuItem>
+                <MenuItem value="packages">Packages</MenuItem>
+                <MenuItem value="jewellery">Jewellery Collection</MenuItem>
+                <MenuItem value="watches">Watch Collection</MenuItem>
+                <MenuItem value="dairies">Dairy Collection</MenuItem>
+                <MenuItem value="wallets">Wallet Collection</MenuItem>
               </Select>
             </FormControl>
           </Grid>
