@@ -247,14 +247,22 @@ const Contact = () => {
               height: 300,
               bgcolor: 'grey.200',
               borderRadius: 1,
+              overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Typography color="text.secondary">
-              Map will be displayed here
-            </Typography>
+            <iframe
+              title="Burma Camp Location"
+              src="https://www.google.com/maps?q=Burma+Camp,+Accra,+Ghana&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
           </Box>
         </Grid>
       </Grid>
