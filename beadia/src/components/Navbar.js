@@ -19,7 +19,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   Menu as MenuIcon,
   ShoppingCart as ShoppingCartIcon,
-  Store as StoreIcon,
 } from '@mui/icons-material';
 import { useCart } from '../context/CartContext';
 
@@ -85,12 +84,10 @@ const Navbar = () => {
               color: 'inherit',
             }}
           >
-            <StoreIcon
-              sx={{
-                color: theme.palette.primary.main,
-                fontSize: 32,
-                mr: 1,
-              }}
+            <img
+              src={process.env.PUBLIC_URL + '/alg.png'}
+              alt="Ann's Luxury Gifts Logo"
+              style={{ width: 32, height: 32, marginRight: 8, objectFit: 'contain', borderRadius: 4 }}
             />
             <Typography
               variant="h6"
