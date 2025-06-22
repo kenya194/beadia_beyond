@@ -93,7 +93,7 @@ const generateProducts = () => {
     });
   }
 
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 10; i++) {
     products.push({
       id: id++,
       name: `Customized Jewellery`,
