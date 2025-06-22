@@ -46,7 +46,7 @@ const generateProducts = () => {
   }
 
   // Generate jewelry products (J1-J11)
-  for (let i = 1; i <= 13; i++) {
+  for (let i = 1; i <= 14; i++) {
     products.push({
       id: id++,
       name: `Customized Packages`,
@@ -58,7 +58,7 @@ const generateProducts = () => {
   }
 
   // Generate kit products (D1-D8)
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 1; i <= 10; i++) {
     products.push({
       id: id++,
       name: `Customized Dairies`,
@@ -82,11 +82,11 @@ const generateProducts = () => {
   }
 
   // Generate kit products (W1-W3)
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 7; i++) {
     products.push({
       id: id++,
       name: `Customized Watches`,
-      price: 'Ghc160 - Ghc200',
+      price: 'Ghc250 - Ghc500',
       image: `/images/Watch${i}.jpg`,
       category: 'watches',
       stock: 'In Stock',
@@ -103,6 +103,18 @@ const generateProducts = () => {
       stock: 'In Stock',
     });
   }
+
+  for (let i = 1; i <= 6; i++) {
+    products.push({
+      id: id++,
+      name: `Customized Bottles`,
+      price: 'Ghc160 - Ghc230',
+      image: `/images/bottle${i}.jpg`,
+      category: 'bottles',
+      stock: 'In Stock',
+    });
+  }
+
 
   return products;
 };
@@ -174,6 +186,7 @@ const ProductList = () => {
                 <MenuItem value="watches">Watch Collection</MenuItem>
                 <MenuItem value="dairies">Dairy Collection</MenuItem>
                 <MenuItem value="wallets">Wallet Collection</MenuItem>
+                <MenuItem value="bottles">Bottle Collection</MenuItem>
               </Select>
             </FormControl>
           </Grid>
