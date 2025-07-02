@@ -39,6 +39,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Beads`,
       price: 'Ghc100 - Ghc150',
+      priceUSD: '$8 - $12',
       image: `/images/B${i}.jpg`,
       category: 'beads',
       stock: 'In Stock',
@@ -51,6 +52,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Packages`,
       price: 'Ghc350 - Ghc500',
+      priceUSD: '$28 - $40',
       image: `/images/P${i}.jpg`,
       category: 'packages',
       stock: 'In Stock',
@@ -63,6 +65,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Dairies`,
       price: 'Ghc180 - Ghc650',
+      priceUSD: '$14 - $52',
       image: `/images/D${i}.jpg`,
       category: 'dairies',
       stock: 'In Stock',
@@ -75,6 +78,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Wallets`,
       price: 'Ghc160 - Ghc200',
+      priceUSD: '$13 - $16',
       image: `/images/W${i}.jpg`,
       category: 'wallets',
       stock: 'In Stock',
@@ -87,6 +91,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Watches`,
       price: 'Ghc250 - Ghc500',
+      priceUSD: '$20 - $40',
       image: `/images/Watch${i}.jpg`,
       category: 'watches',
       stock: 'In Stock',
@@ -98,6 +103,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Jewellery`,
       price: 'Ghc160 - Ghc200',
+      priceUSD: '$13 - $16',
       image: `/images/J${i}.jpg`,
       category: 'jewellery',
       stock: 'In Stock',
@@ -109,6 +115,7 @@ const generateProducts = () => {
       id: id++,
       name: `Customized Bottles`,
       price: 'Ghc160 - Ghc230',
+      priceUSD: '$13 - $18',
       image: `/images/bottle${i}.jpg`,
       category: 'bottles',
       stock: 'In Stock',
@@ -127,7 +134,7 @@ const ProductList = () => {
   const [category, setCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const { addToCart } = useCart();
 
   const filteredProducts = products
@@ -150,10 +157,21 @@ const ProductList = () => {
       return 0;
     });
 
+  // Old add to cart function (commented out)
+  /*
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const handleAddToCart = (product) => {
     addToCart(product);
     setSelectedProduct(product);
     setOpenSnackbar(true);
+  };
+  */
+
+  // New handler for maintenance
+  const handleCartMaintenance = () => {
+    alert('🛠️ Cart is under maintenance. Please check back soon!');
+    // setSnackbarMessage('🛠️ Cart is under maintenance. Please check back soon!');
+    // setOpenSnackbar(true);
   };
 
   return (
@@ -287,6 +305,14 @@ const ProductList = () => {
                     >
                       {product.price}
                     </Typography>
+                    {/* Add USD price below GHC price */}
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mt: 0.5 }}
+                    >
+                      {product.priceUSD && `(${product.priceUSD} USD)`}
+                    </Typography>
                     <Chip
                       label={product.stock}
                       color={product.stock === 'In Stock' ? 'success' : 'warning'}
@@ -299,7 +325,8 @@ const ProductList = () => {
                     size="medium"
                     color="secondary"
                     startIcon={<ShoppingCart />}
-                    onClick={() => handleAddToCart(product)}
+                    // onClick={() => handleAddToCart(product)}
+                    onClick={handleCartMaintenance}
                     sx={{ 
                       width: '100%',
                       py: 1,
@@ -314,6 +341,7 @@ const ProductList = () => {
         ))}
       </Grid>
 
+      {/*
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
@@ -321,12 +349,13 @@ const ProductList = () => {
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
-          severity="success"
+          severity="info"
           sx={{ width: '100%' }}
         >
-          {selectedProduct && `${selectedProduct.name} added to cart!`}
+          {snackbarMessage}
         </Alert>
       </Snackbar>
+      */}
     </Container>
   );
 };
