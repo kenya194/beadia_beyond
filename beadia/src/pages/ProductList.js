@@ -158,21 +158,21 @@ const ProductList = () => {
     });
 
   // Old add to cart function (commented out)
-  /*
+  
   const [selectedProduct, setSelectedProduct] = useState(null);
   const handleAddToCart = (product) => {
     addToCart(product);
     setSelectedProduct(product);
     setOpenSnackbar(true);
   };
-  */
+  
 
   // New handler for maintenance
-  const handleCartMaintenance = () => {
-    alert('🛠️ Cart is under maintenance. Please check back soon!');
+  // const handleCartMaintenance = () => {
+  //   alert('🛠️ Cart is under maintenance. Please check back soon!');
     // setSnackbarMessage('🛠️ Cart is under maintenance. Please check back soon!');
     // setOpenSnackbar(true);
-  };
+  // };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -325,8 +325,8 @@ const ProductList = () => {
                     size="medium"
                     color="secondary"
                     startIcon={<ShoppingCart />}
-                    // onClick={() => handleAddToCart(product)}
-                    onClick={handleCartMaintenance}
+                    onClick={() => handleAddToCart(product)}
+                    // onClick={handleCartMaintenance}
                     sx={{ 
                       width: '100%',
                       py: 1,
