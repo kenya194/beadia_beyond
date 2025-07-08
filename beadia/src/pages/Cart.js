@@ -20,6 +20,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Card,
+  CardContent,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Delete as DeleteIcon,
@@ -30,6 +34,8 @@ import { FaWhatsapp, FaSnapchat } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 
 const Cart = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [openDialog, setOpenDialog] = useState(false);
   const {
     cart,
@@ -50,6 +56,16 @@ const Cart = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const calculateItemTotal = (item) => {
+    let price = item.price;
+    if (price.includes(' - ')) {
+      price = price.split(' - ')[0];
+    }
+    const numericPrice = parseFloat(price.replace('Ghc', '').replace('$', '').trim());
+    const total = numericPrice * item.quantity;
+    return `Ghc${total.toFixed(2)}`;
   };
 
   if (cart.length === 0) {
@@ -81,34 +97,38 @@ const Cart = () => {
 
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Product</TableCell>
-                  <TableCell align="right">Price</TableCell>
-                  <TableCell align="center">Quantity</TableCell>
-                  <TableCell align="right">Total</TableCell>
-                  <TableCell align="right">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {cart.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box
-                          component="img"
-                          src={item.image}
-                          alt={item.name}
-                          sx={{ width: 50, height: 50, mr: 2 }}
-                        />
-                        <Typography>{item.name}</Typography>
+          {isMobile ? (
+            // Mobile: Card-based layout
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {cart.map((item) => (
+                <Card key={item.id} elevation={2}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Box
+                        component="img"
+                        src={item.image}
+                        alt={item.name}
+                        sx={{ width: 60, height: 60, mr: 2, borderRadius: 1 }}
+                      />
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="h6" sx={{ fontSize: '1rem', mb: 0.5 }}>
+                          {item.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {item.price}
+                        </Typography>
                       </Box>
-                    </TableCell>
-                    <TableCell align="right">{item.price}</TableCell>
-                    <TableCell align="center">
-                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton
                           size="small"
                           onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
@@ -121,8 +141,9 @@ const Cart = () => {
                           onChange={(e) => handleQuantityChange(item.id, e.target.value)}
                           inputProps={{
                             min: 1,
-                            style: { textAlign: 'center', width: 40 },
+                            style: { textAlign: 'center', width: 50 },
                           }}
+                          sx={{ mx: 1 }}
                         />
                         <IconButton
                           size="small"
@@ -131,37 +152,91 @@ const Cart = () => {
                           <AddIcon />
                         </IconButton>
                       </Box>
-                    </TableCell>
-                    <TableCell align="right">
-                      {(() => {
-                        let price = item.price;
-                        if (price.includes(' - ')) {
-                          price = price.split(' - ')[0];
-                        }
-                        const numericPrice = parseFloat(price.replace('Ghc', '').replace('$', '').trim());
-                        const total = numericPrice * item.quantity;
-                        return `Ghc${total.toFixed(2)}`;
-                      })()}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        color="error"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
+                      <Typography variant="h6" color="primary">
+                        {calculateItemTotal(item)}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          ) : (
+            // Desktop: Table layout
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Product</TableCell>
+                    <TableCell align="right">Price</TableCell>
+                    <TableCell align="center">Quantity</TableCell>
+                    <TableCell align="right">Total</TableCell>
+                    <TableCell align="right">Actions</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {cart.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Box
+                            component="img"
+                            src={item.image}
+                            alt={item.name}
+                            sx={{ width: 50, height: 50, mr: 2 }}
+                          />
+                          <Typography>{item.name}</Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="right">{item.price}</TableCell>
+                      <TableCell align="center">
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                          >
+                            <RemoveIcon />
+                          </IconButton>
+                          <TextField
+                            size="small"
+                            value={item.quantity}
+                            onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                            inputProps={{
+                              min: 1,
+                              style: { textAlign: 'center', width: 40 },
+                            }}
+                          />
+                          <IconButton
+                            size="small"
+                            onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          >
+                            <AddIcon />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="right">
+                        {calculateItemTotal(item)}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          color="error"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
 
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ mt: 2, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, justifyContent: 'space-between' }}>
             <Button
               component={RouterLink}
               to="/products"
               variant="outlined"
+              fullWidth={isMobile}
             >
               Continue Shopping
             </Button>
@@ -169,6 +244,7 @@ const Cart = () => {
               variant="outlined"
               color="error"
               onClick={clearCart}
+              fullWidth={isMobile}
             >
               Clear Cart
             </Button>
@@ -218,6 +294,8 @@ const Cart = () => {
         open={openDialog}
         onClose={handleCloseDialog}
         aria-labelledby="checkout-dialog-title"
+        fullWidth
+        maxWidth="sm"
       >
         <DialogTitle id="checkout-dialog-title">
           Online Checkout Coming Soon!
@@ -226,7 +304,7 @@ const Cart = () => {
           <Typography variant="body1" paragraph>
             Our online checkout system is currently under development. Please contact us through WhatsApp or Snapchat to complete your purchase.
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', gap: 2, mt: 2 }}>
             <Button
               variant="contained"
               color="success"
@@ -235,6 +313,7 @@ const Cart = () => {
               href="https://wa.me/233540754502"
               target="_blank"
               rel="noopener noreferrer"
+              fullWidth={isMobile}
             >
               WhatsApp
             </Button>
@@ -246,6 +325,7 @@ const Cart = () => {
               href="https://www.snapchat.com/add/an-gella71"
               target="_blank"
               rel="noopener noreferrer"
+              fullWidth={isMobile}
             >
               Snapchat
             </Button>
