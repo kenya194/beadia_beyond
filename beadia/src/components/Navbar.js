@@ -33,7 +33,7 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { text: 'Home', path: '/' },
+    { text: 'Home', path: '/home' },
     { text: 'Products', path: '/products' },
     { text: 'Contact', path: '/contact' },
   ];
@@ -76,7 +76,7 @@ const Navbar = () => {
         <Toolbar disableGutters>
           <Box
             component={RouterLink}
-            to="/"
+            to="/home"
             sx={{
               display: 'flex',
               alignItems: 'center',
