@@ -133,7 +133,15 @@ const Cart = () => {
                       </Box>
                     </TableCell>
                     <TableCell align="right">
-                      ${(parseFloat(item.price.replace('$', '')) * item.quantity).toFixed(2)}
+                      {(() => {
+                        let price = item.price;
+                        if (price.includes(' - ')) {
+                          price = price.split(' - ')[0];
+                        }
+                        const numericPrice = parseFloat(price.replace('Ghc', '').replace('$', '').trim());
+                        const total = numericPrice * item.quantity;
+                        return `Ghc${total.toFixed(2)}`;
+                      })()}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton
@@ -175,7 +183,7 @@ const Cart = () => {
             <Box sx={{ mb: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                 <Typography>Subtotal</Typography>
-                <Typography>${getCartTotal().toFixed(2)}</Typography>
+                <Typography>Ghc{getCartTotal().toFixed(2)}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                 <Typography>Shipping</Typography>
@@ -183,13 +191,13 @@ const Cart = () => {
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Typography>Tax</Typography>
-                <Typography>${(getCartTotal() * 0.1).toFixed(2)}</Typography>
+                <Typography>Ghc{(getCartTotal() * 0.1).toFixed(2)}</Typography>
               </Box>
               <Divider sx={{ my: 2 }} />
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="h6">Total</Typography>
                 <Typography variant="h6">
-                  ${(getCartTotal() * 1.1).toFixed(2)}
+                  Ghc{(getCartTotal() * 1.1).toFixed(2)}
                 </Typography>
               </Box>
             </Box>

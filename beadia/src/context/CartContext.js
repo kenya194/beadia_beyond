@@ -56,10 +56,25 @@ export const CartProvider = ({ children }) => {
   };
 
   const getCartTotal = () => {
-    return cart.reduce(
-      (total, item) => total + parseFloat(item.price.replace('$', '')) * item.quantity,
-      0
-    );
+    return cart.reduce((total, item) => {
+      let price = item.price;
+      
+      // Handle price ranges like "Ghc100 - Ghc150" by taking the first number
+      if (price.includes(' - ')) {
+        price = price.split(' - ')[0];
+      }
+      
+      // Remove "Ghc" and convert to number
+      const numericPrice = parseFloat(price.replace('Ghc', '').replace('$', '').trim());
+      
+      // Check if the price is a valid number
+      if (isNaN(numericPrice)) {
+        console.warn(`Invalid price format for item ${item.id}: ${item.price}`);
+        return total;
+      }
+      
+      return total + (numericPrice * item.quantity);
+    }, 0);
   };
 
   const getCartItemCount = () => {
