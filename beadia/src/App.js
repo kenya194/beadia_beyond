@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { auth } from './firebase/config';
+import { onAuthStateChanged } from 'firebase/auth';
+import { Box, CircularProgress } from '@mui/material';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -158,21 +161,83 @@ const theme = createTheme({
   },
 });
 
+// Protected Route Component for Cart (requires authentication)
+const ProtectedCartRoute = ({ children, user }) => {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+// Guest-friendly routes (no authentication required)
+const GuestRoute = ({ children }) => {
+  return children;
+};
+
 function AppContent() {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>
-      {!isLoginPage && <Navbar />}
+      {!isLoginPage && <Navbar user={user} />}
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/products" element={<ProductList />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<AuthPage />} />
+        <Route path="/" element={<Navigate to={user ? "/home" : "/login"} replace />} />
+        <Route 
+          path="/home" 
+          element={<GuestRoute><HomePage /></GuestRoute>} 
+        />
+        <Route 
+          path="/products" 
+          element={<GuestRoute><ProductList user={user} /></GuestRoute>} 
+        />
+        <Route 
+          path="/products/:id" 
+          element={<GuestRoute><ProductDetails user={user} /></GuestRoute>} 
+        />
+        <Route 
+          path="/contact" 
+          element={<GuestRoute><Contact /></GuestRoute>} 
+        />
+        <Route 
+          path="/cart" 
+          element={
+            <ProtectedCartRoute user={user}>
+              <Cart />
+            </ProtectedCartRoute>
+          } 
+        />
+        <Route 
+          path="/login" 
+          element={user ? <Navigate to="/home" replace /> : <AuthPage />} 
+        />
       </Routes>
       {!isLoginPage && <Footer />}
     </>

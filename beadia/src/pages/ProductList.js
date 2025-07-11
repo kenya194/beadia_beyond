@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Container,
   Grid,
@@ -19,11 +19,16 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import {
   ShoppingCart,
   Favorite,
   Share,
+  Login,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
@@ -129,12 +134,14 @@ const generateProducts = () => {
 // Generate the products array
 const products = generateProducts();
 
-const ProductList = () => {
+const ProductList = ({ user }) => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const { addToCart } = useCart();
 
   const filteredProducts = products
@@ -161,9 +168,23 @@ const ProductList = () => {
   
   const [selectedProduct, setSelectedProduct] = useState(null);
   const handleAddToCart = (product) => {
+    if (!user) {
+      setLoginDialogOpen(true);
+      return;
+    }
     addToCart(product);
     setSelectedProduct(product);
+    setSnackbarMessage(`${product.name} added to cart!`);
     setOpenSnackbar(true);
+  };
+
+  const handleCloseLoginDialog = () => {
+    setLoginDialogOpen(false);
+  };
+
+  const handleLoginFromProduct = () => {
+    setLoginDialogOpen(false);
+    navigate('/login');
   };
   
 
@@ -341,7 +362,6 @@ const ProductList = () => {
         ))}
       </Grid>
 
-      {/*
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
@@ -349,13 +369,46 @@ const ProductList = () => {
       >
         <Alert
           onClose={() => setOpenSnackbar(false)}
-          severity="info"
+          severity="success"
           sx={{ width: '100%' }}
         >
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      */}
+
+      {/* Login Dialog for Guests */}
+      <Dialog
+        open={loginDialogOpen}
+        onClose={handleCloseLoginDialog}
+        aria-labelledby="login-dialog-title"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle id="login-dialog-title">
+          Sign In Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" paragraph>
+            You need to sign in to add items to your cart and make purchases.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Sign in to save your cart items and proceed with checkout.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLoginDialog} color="inherit">
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleLoginFromProduct} 
+            variant="contained" 
+            color="primary"
+            startIcon={<Login />}
+          >
+            Sign In
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

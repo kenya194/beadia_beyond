@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Container,
   Grid,
@@ -14,6 +14,10 @@ import {
   TextField,
   Snackbar,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 import {
   LocationOn,
@@ -21,6 +25,7 @@ import {
   Favorite,
   ArrowBack,
   ShoppingCart,
+  Login,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
@@ -51,12 +56,14 @@ const products = {
   // Add more products as needed
 };
 
-const ProductDetails = () => {
+const ProductDetails = ({ user }) => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const product = products[id];
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const { addToCart } = useCart();
 
   if (!product) {
@@ -76,8 +83,21 @@ const ProductDetails = () => {
   }
 
   const handleAddToCart = () => {
+    if (!user) {
+      setLoginDialogOpen(true);
+      return;
+    }
     addToCart(product, quantity);
     setOpenSnackbar(true);
+  };
+
+  const handleCloseLoginDialog = () => {
+    setLoginDialogOpen(false);
+  };
+
+  const handleLoginFromProduct = () => {
+    setLoginDialogOpen(false);
+    navigate('/login');
   };
 
   return (
@@ -242,6 +262,40 @@ const ProductDetails = () => {
           Added to cart successfully!
         </Alert>
       </Snackbar>
+
+      {/* Login Dialog for Guests */}
+      <Dialog
+        open={loginDialogOpen}
+        onClose={handleCloseLoginDialog}
+        aria-labelledby="login-dialog-title"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle id="login-dialog-title">
+          Sign In Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" paragraph>
+            You need to sign in to add items to your cart and make purchases.
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Sign in to save your cart items and proceed with checkout.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLoginDialog} color="inherit">
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleLoginFromProduct} 
+            variant="contained" 
+            color="primary"
+            startIcon={<Login />}
+          >
+            Sign In
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
