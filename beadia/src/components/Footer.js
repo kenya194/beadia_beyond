@@ -304,7 +304,7 @@ const Footer = () => {
           }}
         >
           <Typography variant="body2" sx={{ color: theme.palette.primary.contrastText }}>
-            © {new Date().getFullYear()} ALG. All rights reserved.
+            © {new Date().getFullYear()} ALG. All rights reserved. Designed by <Link href="https://ernestbuilds.vercel.app/" target="_blank" rel="noopener noreferrer">Ernest Amankwah</Link>
           </Typography>
         </Box>
       </Container>
