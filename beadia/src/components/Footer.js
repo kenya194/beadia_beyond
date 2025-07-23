@@ -304,7 +304,7 @@ const Footer = () => {
           }}
         >
           <Typography variant="body2" sx={{ color: theme.palette.primary.contrastText }}>
-            © {new Date().getFullYear()} ALG. All rights reserved. Designed by <Link href="https://ernestbuilds.vercel.app/" target="_blank" rel="noopener noreferrer">Ernest Amankwah</Link>
+            © {new Date().getFullYear()} ALG. All rights reserved. Designed by <Link href="https://ernestbuilds.vercel.app/" target="_blank" rel="noopener noreferrer" sx={{ color: theme.palette.secondary.main, textDecoration: 'none', '&:hover': { color: theme.palette.highlight.main } }}>Ernest Amankwah</Link> 
           </Typography>
         </Box>
       </Container>
@@ -312,4 +312,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;
